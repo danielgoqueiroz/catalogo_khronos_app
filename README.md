@@ -1,16 +1,10 @@
-# catalogo_khronos_app
+# catalogo_de_produtos_wp_app
 
-A new Flutter project.
+Um projeto genérico de catalogo de produtos com uso de api woocommerce
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Instalar wordpress com plugin woocommerce
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### woocommerce-rest-api
+https://woocommerce.com/document/woocommerce-rest-api/
