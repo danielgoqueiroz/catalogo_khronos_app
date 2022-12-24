@@ -41,11 +41,11 @@ dependencies:
   getwidget: ^2.0.4
 #  cached_network_image: ^3.2.0
 #  link_preview_generator: ^1.2.0
-#  flutter_html: ^2.2.1
+  flutter_html: ^2.2.1
 #  flutter_launcher_icons: ^0.11.0
 #  carousel_slider: ^4.0.0
 #  video_player: ^2.2.10
-#  html: ^0.15.0
+  html: ^0.15.0
 #  youtube_player_flutter: ^8.1.0
 #  youtube_player_iframe: ^2.3.0
   monahawk_woocommerce: ^1.0.0

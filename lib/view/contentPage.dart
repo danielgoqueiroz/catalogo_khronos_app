@@ -1,14 +1,8 @@
-// import 'package:carousel_slider/carousel_slider.dart';
-import 'package:catalogo_khronos_app/model/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-// import 'package:flutter_html/shims/dart_ui_real.dart';
-// import 'package:html/dom.dart' as dom;
-// import 'package:html/parser.dart';
-import 'package:intl/intl.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart';
 import 'package:monahawk_woocommerce/models/products.dart';
-// import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MyContentPage extends StatefulWidget {
   MyContentPage({Key? key, required this.product}) : super(key: key);
@@ -29,10 +23,10 @@ class _MyHomePageState extends State<MyContentPage> {
     //
     List<Widget> widgets = [];
     //
-    Widget image = mainImageWidget();
+    Widget image = mainImageWidget(product);
     widgets.add(image);
     //
-    // titleWidgets(widgets);
+    titleWidgets(product, widgets);
     //
     // widgets.addAll(getContentWidgets(document));
 
@@ -44,19 +38,61 @@ class _MyHomePageState extends State<MyContentPage> {
             backgroundColor: Color.fromRGBO(182, 0, 0, 1.0),
             title: Text(product.name ?? '')),
         body: Container(
-            child: Text(
-                product.attributes.map((e) =>
-                (e.name! + " " + e.options.toString())
-
-            ).join(", "))
-            //   child: SingleChildScrollView(
-            // child: Column(children: /),
-            )
-        // ),
-        );
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              height: 230,
+              width: 200,
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(
+                      product.images[0].src ?? '',
+                    ),
+                    fit: BoxFit.cover),
+                color: Colors.pinkAccent,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              //child: Image.network(product.images[0].src, fit: BoxFit.cover,),
+            ),
+            ...getContentWidgets(product.shortDescription.toString()),
+            getAttributesWidgets()
+          ],
+        )));
   }
 
-  void titleWidgets(List<Widget> widgets) {
+  getAttributesWidgets() {
+    List<Widget> chips = [];
+    product.attributes.forEach((att) {
+      var chip = Chip(
+        labelPadding: EdgeInsets.all(2.0),
+        label: Text(
+          att.name.toString() + " : " + att.options!.first.toString(),
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.red,
+        elevation: 6.0,
+        shadowColor: Colors.grey[60],
+        padding: EdgeInsets.all(8.0),
+      );
+      chips.add(chip);
+    });
+    return Wrap(
+        spacing: 6.0,
+        runSpacing: 6.0,
+        children: <Widget> [
+          ...chips
+        ]
+
+    );
+  }
+
+}
+
+  void titleWidgets(WooProduct product, List<Widget> widgets) {
     widgets.add(Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -73,7 +109,7 @@ class _MyHomePageState extends State<MyContentPage> {
     ));
   }
 
-  Widget mainImageWidget() {
+  Widget mainImageWidget(WooProduct product) {
     var isImageValid = product.images.length > 0;
     Widget image = Stack(
       children: [
@@ -91,21 +127,23 @@ class _MyHomePageState extends State<MyContentPage> {
     return image;
   }
 
-// List<Widget> getContentWidgets(dom.Document document) {
-//   List<Widget> widgets = [];
-//
-//   dom.Element body = document.getElementsByTagName('body')[0];
-//   body.nodes.forEach((element) {
-//     if (element is dom.Element) {
-//       getTextsWidget(element, widgets);
-//       getImagesWidget(element, widgets);
-//       getDivElements(element, widgets);
-//       getCoteElement(element, widgets);
-//       getReadMoreElement(element, widgets);
-//     }
-//   });
-//   return widgets;
-// }
+  List<Widget> getContentWidgets(String html) {
+    List<Widget> widgets = [];
+
+    dom.Document document = parse(html);
+    dom.Element body = document.getElementsByTagName('body')[0];
+    body.nodes.forEach((element) {
+      if (element is dom.Element) {
+        getTextsWidget(element, widgets);
+        // getImagesWidget(element, widgets);
+        // getDivElements(element, widgets);
+        // getCoteElement(element, widgets);
+        // getReadMoreElement(element, widgets);
+      }
+    });
+    return widgets;
+  }
+
 //
 // void getDivElements(dom.Element element, List<Widget> widgets) async {
 //   if (element.localName == 'div') {
@@ -207,17 +245,17 @@ class _MyHomePageState extends State<MyContentPage> {
 //   }
 // }
 //
-// void getTextsWidget(dom.Element element, List<Widget> widgets) {
-//   if (element.localName == 'p') {
-//     widgets.add(Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Text(element.text,
-//           style: TextStyle(
-//             fontSize: 16,
-//           )),
-//     ));
-//   }
-// }
+  void getTextsWidget(dom.Element element, List<Widget> widgets) {
+    if (element.localName == 'p') {
+      widgets.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(element.text,
+            style: TextStyle(
+              fontSize: 16,
+            )),
+      ));
+    }
+  }
 //
 // String getText(String excerpt) {
 //   dom.Document document = parse(excerpt);
@@ -243,4 +281,4 @@ class _MyHomePageState extends State<MyContentPage> {
 //     ));
 //   }
 // }
-}
+// }
